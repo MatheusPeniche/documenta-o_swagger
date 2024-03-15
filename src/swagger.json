@@ -1,0 +1,625 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Swagger Library Manager - OpenAPI 3.0",
+        "description": "Esta é a documentação da API para gerenciamento de uma biblioteca",
+        "contact": {
+            "email": "peniche.9988@aluno.pr.senac.br"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333"
+        }
+    ],
+    "tags": [
+        {
+            "name": "books",
+            "description": "Gerenciamento dos livros da biblioteca"
+          },
+          {
+            "name": "loans",
+            "description": "Realize empréstimos e devoluções dos livros"
+          },
+          {
+            "name": "users",
+            "description": "Operações a respeito do usuário"
+          }
+    ],
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["users"],
+                "summary": "Cria um novo usuário",
+                "description": "Cria um novo usuário passando suas informações básicas",
+                "operationId": "createUser",
+                "requestBody": {
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "peniche",
+                                        "email": "penihce@mail.com",
+                                        "telefone": "41 9777-7977"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Usuário já cadastrado"
+                    },
+                    "200": {
+                        "description": "Usuário criado com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["users"],
+                "summary": "Lista os usuários criados",
+                "description": "Lista todos os usuários do sistema junto com suas informações",
+                "operationId": "listUser",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["users"],
+                "summary": "Lista um usuário pelo id",
+                "description": "Lista um usuário específico pelo id, junto com suas informações",
+                "operationId": "listUserById",
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuários pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            },
+            "put":  {
+                "tags": ["users"],
+                "summary": "Atualizar dados dos usuários",
+                "description": "Muda e atualiza os dados de um usuário específico pelo id",
+                "operationId": "updateUser",
+                "requestBody": {
+                    "description": "Atualiza dados como nome, email, telefone",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "Romeu",
+                                        "email": "Romeu&Julietta@mail.com",
+                                        "telefone": "41 9912-0000"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuários pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Usuário já cadastrado"
+                    },
+                    "200": {
+                        "description": "Usuário criado com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["users"],
+                "summary": "Deletar um usuário",
+                "description": "Deleta um usuário pelo id, todas as suas informações são deletadas",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuários pelo id",
+                    "require": true,
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  
+ 
+            }
+        },
+        "/books": {
+            "post": {
+                "tags": ["books"],
+                "summary": "Cria um novo livro",
+                "description": "Cria um novo livro passando suas informações básicas",
+                "operationId": "createBook",
+                "requestBody": {
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/Book"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "title": "O mar",
+                                        "author": "Pedro",
+                                        "numPag": "400",
+                                        "category": "Fantasia"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Livro já cadastrado"
+                    },
+                    "200": {
+                        "description": "Livro criado com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["books"],
+                "summary": "Lista os livros criados",
+                "description": "Lista todos os livros do sistema junto com suas informações",
+                "operationId": "listBook",
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  
+            }
+        },
+        "/books/{book_id}": {
+            "put": {
+                "tags": ["books"],
+                "summary": "Atualizar dados dos livros",
+                "description": "Muda e atualiza os dados de um livro específico pelo id",
+                "operationId": "updateBook",
+                "requestBody": {
+                    "description": "Atualiza dados como title, author, numPag, category",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                              "$ref": "#/components/schemas/Book"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "Romeu",
+                                        "email": "Romeu&Julietta@mail.com",
+                                        "telefone": "41 9912-0000"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                    "name": "book_id",
+                    "in": "path",
+                    "description": "filtra os livros pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Livro já cadastrado"
+                    },
+                    "200": {
+                        "description": "Livro criado com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["books"],
+                "summary": "Deletar um livro",
+                "description": "Deleta um livro pelo id, todas as suas informações são deletadas",
+                "operationId": "deleteBook",
+                "parameters": [
+                    {
+                    "name": "book_id",
+                    "in": "path",
+                    "description": "filtra os livros pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  
+ 
+            },
+            "get": {
+                "tags": ["books"],
+                "summary": "Lista um livro pelo id",
+                "description": "Lista um livro específico pelo id, junto com suas informações",
+                "operationId": "listBookById",
+                "parameters": [
+                    {
+                    "name": "book_id",
+                    "in": "path",
+                    "description": "filtra os livros pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            },
+            "patch": {
+                "tags": ["books"],
+                "summary": "Muda status do livro",
+                "description": "Muda o status de available de um livro específico pelo id!",
+                "operationId": "updateBookStatus",
+                "parameters": [
+                    {
+                    "name": "book_id",
+                    "in": "path",
+                    "description": "filtra os livros pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Book"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            }
+        },        
+        "loans/{user_id}/{book_id}": {
+            "post": {
+                "tags": ["loans"],
+                "summary": "Cria um novo empréstimo",
+                "description": "Cria um novo emprestimo utilizando o id do usuário e do livro",
+                "operationId": "createLoans",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "filtra os usuários pelo id",
+                        "schema": {
+                            "type": "int"                        
+                        }                        
+                    },
+                    {
+                        "name": "book_id",
+                        "in": "path",
+                        "description": "filtra os livros pelo id",
+                        "schema": {
+                            "type": "int"                        
+                            }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Emprestimo realizado com sucesso!",
+                        "content": {
+                            "apllication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "items": {
+                                        "$ref": "#components/schemas/Loan"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }          
+        },
+        "loans/{user_id}": {
+            "get": {
+                "tags": ["loans"],
+                "summary": "Lista os emprestimos",
+                "description": "Lista os emprestimos de um usuário pelo id de usuário",
+                "operationId": "listLoans",
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuários pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Loan"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            }
+        },
+        "loans/total/{user_id}": {
+            "get": {
+                "tags": ["loans"],
+                "summary": "Mostra o total de livros emprestados",
+                "description": "seleciona um usuário pelo id e soma todos os livros emprestados e mostra do total",
+                "operationId": "totalLoans",
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuários pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Loan"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            }
+        },
+        "loans/devolucao/{user_id}/{book_id}": {
+            "patch": {
+                "tags": ["loans"],
+                "summary": "Devolver um livro",
+                "description": "devolve um livro emprestado pelo usuario, utilizando o id de usuario e de livro!",
+                "operationId": "returnLoans",
+                "parameters": [
+                    {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "filtra os usuarios pelo id",
+                    "schema": {
+                        "type": "int"                        
+                        }                        
+                    },
+                    {
+                        "name": "book_id",
+                        "in": "path",
+                        "description": "filtra os livros pelo id",
+                        "schema": {
+                            "type": "int"                        
+                            }                        
+                        }
+                ],
+                "responses": {
+                    "200": {
+                    "description": "Operação realizada com sucesso!",
+                    "content": {
+                        "apllication/json": {
+                            "schema": {
+                                "type": "object",
+                                "items": {
+                                    "$ref": "#components/schemas/Loan"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }        
+            }
+        }  
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    }
+                }
+            },      
+            "Book": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "author": {
+                    "type": "string"
+               },
+                "numPag": {
+                    "type": "string"
+               },
+                "category": {
+                    "type": "string"
+                    }
+                }
+            },
+            "Loan": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "int"
+                    },
+                    "book_id": {
+                        "type": "int"
+                    }
+                }
+            }
+        }
+    }
+}
